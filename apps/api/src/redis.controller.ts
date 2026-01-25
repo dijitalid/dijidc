@@ -13,10 +13,14 @@ export class RedisController {
   async ping() {
     const started = Date.now();
     try {
+      // Ensure connection is opened
+      await Promise.race([connection.connect(), timeout<void>(6000, "CONNECT")]);
+
       const pong = await Promise.race([
         connection.ping(),
-        timeout<string>(6000, "PING")
+        timeout<string>(6000, "PING"),
       ]);
+
       return { ok: true, pong, ms: Date.now() - started };
     } catch (e: any) {
       return { ok: false, error: String(e?.message || e), ms: Date.now() - started };

@@ -1,21 +1,13 @@
 import { Redis } from "ioredis";
 
 const url = process.env.UPSTASH_REDIS_URL;
+if (!url) throw new Error("UPSTASH_REDIS_URL is missing");
 
-if (!url) {
-  // Hızlı teşhis için: env yoksa zaten patlayalım
-  throw new Error("UPSTASH_REDIS_URL is missing");
-}
-
+// Upstash + serverless safe config
 export const connection = new Redis(url, {
-  // Fail-fast (serverless için önemli)
-  connectTimeout: 5000,
-  maxRetriesPerRequest: 1,
+  lazyConnect: true,
   enableReadyCheck: false,
-
-  // TLS: Upstash için çoğu zaman gerekmez (rediss:// zaten TLS)
-  // Eğer redis:// + --tls mantığında gidiyorsan, aşağıyı aç:
-  // tls: {},
-
-  retryStrategy: () => null, // sonsuz retry yok
+  maxRetriesPerRequest: 1,
+  connectTimeout: 8000,
+  retryStrategy: () => null, // no infinite retries
 });

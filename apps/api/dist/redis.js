@@ -2,8 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connection = void 0;
 const ioredis_1 = require("ioredis");
-exports.connection = new ioredis_1.Redis(process.env.UPSTASH_REDIS_REST_URL, {
-    password: process.env.UPSTASH_REDIS_REST_TOKEN,
-    tls: {}
+const url = process.env.UPSTASH_REDIS_URL;
+if (!url) {
+    throw new Error("UPSTASH_REDIS_URL is missing");
+}
+exports.connection = new ioredis_1.Redis(url, {
+    connectTimeout: 5000,
+    maxRetriesPerRequest: 1,
+    enableReadyCheck: false,
+    retryStrategy: () => null,
 });
 //# sourceMappingURL=redis.js.map

@@ -1,4 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+  @Get("version")
+  version() {
+    return { sha: process.env.VERCEL_GIT_COMMIT_SHA || "unknown" };
+  }
+xximport { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class AppController {

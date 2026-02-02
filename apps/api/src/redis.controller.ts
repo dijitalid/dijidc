@@ -1,5 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
-import { connection } from "./redis";
+import { getRedis } from "./redis";
 
 function timeout<T>(ms: number, label: string) {
   return new Promise<T>((_, reject) =>
@@ -13,6 +13,8 @@ export class RedisController {
   async ping() {
     const started = Date.now();
     try {
+      const connection = getRedis();
+
       // Ensure connection is opened
       await Promise.race([connection.connect(), timeout<void>(6000, "CONNECT")]);
 

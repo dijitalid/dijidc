@@ -1,5 +1,6 @@
+
 import { Body, Controller, Post } from "@nestjs/common";
-import { downloadQueue } from "./queue";
+import { getDownloadQueue } from "./queue";
 import { db } from "./db";
 
 @Controller("jobs")
@@ -28,7 +29,8 @@ export class JobsController {
     const jobDbId = inserted.rows[0].id as string;
 
     // 2) Redis kuyruğa job bırak
-    const job = await downloadQueue.add("download", {
+    const job = await getDownloadQueue().add("download", {
+
       ...body,
       jobDbId
     });

@@ -1,0 +1,24 @@
+
+# local env
+.env
+.env.*
+!.env.example
+
+# node
+**/node_modules/
+
+# build outputs
+**/dist/
+**/*.tsbuildinfo
+
+# local env
+.env
+.env.*
+!.env.example
+
+# node
+**/node_modules/
+
+# build outputs
+**/dist/
+**/*.tsbuildinfo
